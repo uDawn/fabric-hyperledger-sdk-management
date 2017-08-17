@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1d56b8de-f021-467c-b989-d1b952de980e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Management.java" afterPath="$PROJECT_DIR$/src/main/java/Management.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,8 +37,8 @@
       <file leaf-file-name="Management.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Management.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="513" column="52" lean-forward="false" selection-start-line="513" selection-start-column="52" selection-end-line="513" selection-end-column="52" />
+            <state relative-caret-position="176">
+              <caret line="488" column="27" lean-forward="true" selection-start-line="488" selection-start-column="27" selection-end-line="488" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -317,7 +316,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502954572125</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="update">
+      <created>1502954973998</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1502954973998</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -417,8 +423,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Management.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="513" column="52" lean-forward="false" selection-start-line="513" selection-start-column="52" selection-end-line="513" selection-end-column="52" />
+        <state relative-caret-position="176">
+          <caret line="488" column="27" lean-forward="true" selection-start-line="488" selection-start-column="27" selection-end-line="488" selection-end-column="27" />
           <folding />
         </state>
       </provider>
