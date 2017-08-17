@@ -2,8 +2,7 @@ import org.junit.Test;
 
 public class TestManagement {
 
-    @Test
-    public void test(){
+    public static void main(String[] args){
         Management management = new Management();
         try{
             management.constructSetup();
