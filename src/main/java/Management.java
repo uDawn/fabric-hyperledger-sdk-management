@@ -50,7 +50,7 @@ public class Management {
     }
 
     public void constructSetup() throws Throwable {
-        logger.debug(String.format("Construct setup."));
+        logger.info(String.format("Construct setup."));
 
         // this.myChannel.setTransactionWaitTime(testConfig.getTransactionWaitTime());
         // this.myChannel.setDeployWaitTime(testConfig.getDeployWaitTime());
@@ -135,7 +135,7 @@ public class Management {
             this.installChaincode(this.client, this.myChannel, this.sampleOrg);
             this.instantiateChaincode(this.client, this.myChannel, this.sampleOrg);
             //this.myChannel = reconstructChannel(this.CHANNEL_NAME, this.client, this.sampleOrg);
-            logger.debug(String.format("Construct end."));
+            logger.info(String.format("Construct end."));
         } catch (Exception e) {
             logger.error(String.format("%s", e.getMessage()));
             throw e.getCause();
@@ -147,7 +147,7 @@ public class Management {
     public void reconstructSetup() throws Throwable {
 
         try {
-            logger.debug(String.format("Reconstruct setup."));
+            logger.info(String.format("Reconstruct setup."));
 
             this.client = HFClient.createNewInstance();
 
@@ -189,7 +189,7 @@ public class Management {
                     .setPath(CHAIN_CODE_PATH).build();
 
             this.myChannel = reconstructChannel(this.CHANNEL_NAME, this.client, this.sampleOrg);
-            logger.debug(String.format("Reconstruct end."));
+            logger.info(String.format("Reconstruct end."));
         } catch (Exception e) {
             logger.error(String.format("%s", e.getMessage()));
             throw e.getCause();
@@ -204,7 +204,7 @@ public class Management {
         //Construct the channel
         //
 
-        logger.debug(String.format("Running onstruct channel."));
+        logger.info(String.format("Running onstruct channel."));
 
         //Only peer Admin org
         client.setUserContext(sampleOrg.getPeerAdmin());
@@ -234,7 +234,7 @@ public class Management {
         //Create channel that has only one signer that is this orgs peer admin. If channel creation policy needed more signature they would need to be added too.
         Channel newChannel = client.newChannel(name, anOrderer, channelConfiguration, client.getChannelConfigurationSignature(channelConfiguration, sampleOrg.getPeerAdmin()));
 
-        logger.debug(String.format("Created channel %s.", name));
+        logger.info(String.format("Created channel %s.", name));
 
         for (String peerName : sampleOrg.getPeerNames()) {
             String peerLocation = sampleOrg.getPeerLocation(peerName);
@@ -248,13 +248,13 @@ public class Management {
 
             Peer peer = client.newPeer(peerName, peerLocation, peerProperties);
             newChannel.joinPeer(peer);
-            logger.debug(String.format("Peer %s joined channel %s", peerName, name));
+            logger.info(String.format("Peer %s joined channel %s", peerName, name));
             sampleOrg.addPeer(peer);
         }
 
         for (Orderer orderer : orderers) { //add remaining orderers if any.
             newChannel.addOrderer(orderer);
-            logger.debug(String.format("Orderer %s joined channel %s", orderer.getName(), name));
+            logger.info(String.format("Orderer %s joined channel %s", orderer.getName(), name));
         }
 
         for (String eventHubName : sampleOrg.getEventHubNames()) {
@@ -271,7 +271,7 @@ public class Management {
 
         newChannel.initialize();
 
-        logger.debug(String.format("Finished initialization channel %s", name));
+        logger.info(String.format("Finished initialization channel %s", name));
 
         return newChannel;
 
@@ -279,7 +279,7 @@ public class Management {
 
     private Channel reconstructChannel(String name, HFClient client, SampleOrg sampleOrg) throws Exception {
 
-        logger.debug("Running reconstruct channel");
+        logger.info("Running reconstruct channel");
         client.setUserContext(sampleOrg.getPeerAdmin());
         Channel newChannel = client.newChannel(name);
 
@@ -342,7 +342,7 @@ public class Management {
             }
 
         }
-        logger.debug("End reconstruct");
+        logger.info("End reconstruct");
         return newChannel;
 
     }
@@ -351,7 +351,7 @@ public class Management {
         try {
 
             final String channelName = channel.getName();
-            logger.debug(String.format("Install chaincode for channel %s", channelName));
+            logger.info(String.format("Install chaincode for channel %s", channelName));
             channel.setTransactionWaitTime(testConfig.getTransactionWaitTime());
             channel.setDeployWaitTime(testConfig.getDeployWaitTime());
 
@@ -372,7 +372,7 @@ public class Management {
 
             client.setUserContext(sampleOrg.getPeerAdmin());
 
-            logger.debug("Creating install proposal");
+            logger.info("Creating install proposal");
 
             InstallProposalRequest installProposalRequest = client.newInstallProposalRequest();
             installProposalRequest.setChaincodeID(chaincodeID);
@@ -385,7 +385,7 @@ public class Management {
 
             installProposalRequest.setChaincodeVersion(CHAIN_CODE_VERSION);
 
-            logger.debug("Sending install proposal");
+            logger.info("Sending install proposal");
 
             ////////////////////////////
             // only a client from the same org as the peer can issue an install request
@@ -416,7 +416,7 @@ public class Management {
                 fail("Not enough endorsers for install :" + successful.size() + ".  " + first.getMessage());
             }
 
-            logger.debug("Install chaincode successful.");
+            logger.info("Install chaincode successful.");
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw e.getCause();
@@ -430,7 +430,7 @@ public class Management {
         Collection<Orderer> orderers = channel.getOrderers();
 
         try {
-            logger.debug(String.format("Instantiate chaincode for channel %s.", channel.getName()));
+            logger.info(String.format("Instantiate chaincode for channel %s.", channel.getName()));
             InstantiateProposalRequest instantiateProposalRequest = client.newInstantiationProposalRequest();
             instantiateProposalRequest.setProposalWaitTime(testConfig.getProposalWaitTime());
             instantiateProposalRequest.setChaincodeID(chaincodeID);
@@ -472,7 +472,7 @@ public class Management {
             }
 
             channel.sendTransaction(successful, orderers).get(testConfig.getTransactionWaitTime(), TimeUnit.SECONDS);
-            logger.debug("Instantiate end.");
+            logger.info("Instantiate end.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -492,7 +492,7 @@ public class Management {
 
     private boolean checkInstalledChaincode(HFClient client, Peer peer, String ccName, String ccPath, String ccVersion) throws InvalidArgumentException, ProposalException {
 
-        logger.debug(String.format("Checking installed chaincode: %s, at version: %s, on peer: %s", ccName, ccVersion, peer.getName()));
+        logger.info(String.format("Checking installed chaincode: %s, at version: %s, on peer: %s", ccName, ccVersion, peer.getName()));
         List<Query.ChaincodeInfo> ccinfoList = client.queryInstalledChaincodes(peer);
 
         boolean found = false;
@@ -510,7 +510,7 @@ public class Management {
     }
 
     private boolean checkInstantiatedChaincode(Channel channel, Peer peer, String ccName, String ccPath, String ccVersion) throws InvalidArgumentException, ProposalException {
-        logger.debug(String.format("Checking instantiated chaincode: %s, at version: %s, on peer: %s", ccName, ccVersion, peer.getName()));
+        logger.info(String.format("Checking instantiated chaincode: %s, at version: %s, on peer: %s", ccName, ccVersion, peer.getName()));
         List<Query.ChaincodeInfo> ccinfoList = channel.queryInstantiatedChaincodes(peer);
 
         boolean found = false;
@@ -532,7 +532,7 @@ public class Management {
         String tmp_amount = amount;
         final String channelName = this.myChannel.getName();
 
-        logger.debug(String.format("Running transfer on channel %s", channelName));
+        logger.info(String.format("Running transfer on channel %s", channelName));
 
         this.myChannel.setTransactionWaitTime(testConfig.getTransactionWaitTime());
         this.myChannel.setDeployWaitTime(testConfig.getDeployWaitTime());
@@ -595,7 +595,7 @@ public class Management {
                         firstTransactionProposalResponse.getMessage() +
                         ". Was verified: " + firstTransactionProposalResponse.isVerified());
             }
-            logger.debug("Successfully received transaction proposal responses.");
+            logger.info("Successfully received transaction proposal responses.");
 
             ProposalResponse resp = transactionPropResp.iterator().next();
             byte[] x = resp.getChaincodeActionResponsePayload(); // This is the data returned by the chaincode.
@@ -622,7 +622,7 @@ public class Management {
             // Send Transaction Transaction to orderer
             logger.info(String.format("Sending chaincode transaction(transfer %s,%s,%s) to orderer.", tmp_account_1, tmp_account_2, tmp_amount));
             this.myChannel.sendTransaction(successful).get(testConfig.getTransactionWaitTime(), TimeUnit.SECONDS);
-            logger.debug(String.format("End transfer on channel %s.", channelName));
+            logger.info(String.format("End transfer on channel %s.", channelName));
             return true;
         } catch (Exception e) {
             logger.error(String.format("Caught an error while invoking chaincode , %s.", e.getMessage()));
@@ -644,7 +644,7 @@ public class Management {
         final String channelName = this.myChannel.getName();
         String tmp_amount = null;
 
-        logger.debug(String.format("Running query on channel %s.", channelName));
+        logger.info(String.format("Running query on channel %s.", channelName));
         //this.myChannel.sendTransaction(successful, orderers).thenApply(transactionEvent -> {
         try {
             //testTxID = transactionEvent.getTransactionID(); // used in the channel queries later
@@ -653,7 +653,7 @@ public class Management {
             // Send Query Proposal to all peers
             //
             // String expect = "300";
-            logger.debug(String.format("Now query chaincode for the value of %s.", account));
+            logger.info(String.format("Now query chaincode for the value of %s.", account));
             QueryByChaincodeRequest queryByChaincodeRequest = client.newQueryProposalRequest();
             queryByChaincodeRequest.setArgs(new String[]{account});
             queryByChaincodeRequest.setFcn("query");
@@ -680,7 +680,7 @@ public class Management {
                     // assertEquals(payload, expect);
                 }
             }
-            logger.debug(String.format("End query on channel %s.", channelName));
+            logger.info(String.format("End query on channel %s.", channelName));
             return tmp_amount;
         } catch (Exception e) {
             logger.error(String.format("Caught error while running query , %s.", e.getMessage()));
