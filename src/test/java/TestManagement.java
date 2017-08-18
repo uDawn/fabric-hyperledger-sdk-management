@@ -9,7 +9,7 @@ public class TestManagement {
             management.constructSetup();
             System.out.println("a : " + management.query("a"));
             System.out.println("b : " + management.query("b"));
-            management.transfer("a" , "b" , "100.0");
+            management.transfer("a" , "b" , "100.5");
             System.out.println("a : " + management.query("a"));
             System.out.println("b : " + management.query("b"));
             //management.reconstructSetup();
