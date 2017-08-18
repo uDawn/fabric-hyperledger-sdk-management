@@ -100,9 +100,9 @@ public class Management {
                     RegistrationRequest rr = new RegistrationRequest(user.getName(), "org1.department1");
                     String tmp = ca.register(rr, admin);
                     user.setEnrollmentSecret(tmp);
-                    File secret = new File("src/secret.txt");
-                    FileOutputStream write_secret = new FileOutputStream(secret, false);
-                    write_secret.write(tmp.getBytes());
+                    //File secret = new File("src/secret.txt");
+                    //FileOutputStream write_secret = new FileOutputStream(secret, false);
+                    //write_secret.write(tmp.getBytes());
                 }
                 if (!user.isEnrolled()) {
                     user.setEnrollment(ca.enroll(user.getName(), user.getEnrollmentSecret()));
@@ -139,6 +139,7 @@ public class Management {
             logger.info(String.format("Construct end."));
         } catch (Exception e) {
             logger.error(String.format("%s", e.getMessage()));
+            e.printStackTrace();
             throw e.getCause();
             //e.printStackTrace();
         }
