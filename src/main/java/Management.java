@@ -10,6 +10,7 @@ import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +68,7 @@ public class Management {
 
             //Persistence is not part of SDK. Sample file store is for demonstration purposes only!
             //   MUST be replaced with more robust application implementation  (Database, LDAP)
-            File sampleStoreFile = new File(this.opProperties.getProperty("hyperledger.fabric.operation.HFCpath"));
+            File sampleStoreFile = new File(System.getProperty("java.io.tmpdir") + "/HFCSampletest.properties");
             if (sampleStoreFile.exists()) { //For testing start fresh
                 sampleStoreFile.delete();
             }
@@ -435,7 +436,7 @@ public class Management {
             instantiateProposalRequest.setProposalWaitTime(testConfig.getProposalWaitTime());
             instantiateProposalRequest.setChaincodeID(chaincodeID);
             instantiateProposalRequest.setFcn("init");
-            instantiateProposalRequest.setArgs(new String[]{"a", "500", "b", "200"});
+            instantiateProposalRequest.setArgs(new String[]{"a", "500.5", "b", "200.5"});
             Map<String, byte[]> tm = new HashMap<>();
             tm.put("HyperLedgerFabric", "InstantiateProposalRequest:JavaSDK".getBytes(UTF_8));
             tm.put("method", "InstantiateProposalRequest".getBytes(UTF_8));
@@ -674,8 +675,10 @@ public class Management {
                             ". Messages: " + proposalResponse.getMessage()
                             + ". Was verified : " + proposalResponse.isVerified());
                 } else {
-                    String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
-                    tmp_amount = payload;
+                    byte[] payloadByteArr = proposalResponse.getProposalResponse().getResponse().getPayload().toByteArray();
+                    double payload = ByteBuffer.wrap(payloadByteArr).getDouble();
+                    //String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
+                    tmp_amount = Double.toString(payload);
                     logger.info(String.format("Query payload of %s from peer %s returned %s", account, proposalResponse.getPeer().getName(), payload));
                     // assertEquals(payload, expect);
                 }
